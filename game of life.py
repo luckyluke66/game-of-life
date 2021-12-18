@@ -1,12 +1,16 @@
 import pygame
 import sys
-from game_window_class import *
+from game_window import *
 
 pygame.init()
 
+BLACK = (0,0,0)
+WHITE = (255,255,255)
+DARK_GRAY = (64,64,64)
+LIGHT_GRAY = (84,84,84)
+
 clock = pygame.time.Clock()
 
-BLACK = (0,0,0)
 WIDTH, HEIGHT = 800, 800
 FPS = 60
 
@@ -17,7 +21,7 @@ def update():
     game_window.update()
 
 def draw():
-    WIN.fill((234,56,78))
+    WIN.fill(BLACK)
     game_window.draw()
     
 
@@ -33,8 +37,4 @@ def main():
         pygame.display.update()
     pygame.quit()
     sys.exit()
-
 main()
-
-
-
