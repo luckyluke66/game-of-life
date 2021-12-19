@@ -1,10 +1,14 @@
 import pygame 
+import random
 
 BLACK = (0,0,0)
 WHITE = (255,255,255)
 DARK_GRAY = (64,64,64)
 LIGHT_GRAY = (84,84,84)
 RED = (222, 7, 25)
+
+cell_size = 18
+border_size = 1
 
 class Cell:
     def __init__(self, surface, grid_x, grid_y):
@@ -23,7 +27,6 @@ class Cell:
             self.image.fill(LIGHT_GRAY)
         else:
             self.image.fill(LIGHT_GRAY)
-            pygame.draw.rect(self.image, DARK_GRAY, (2,2,18,18))
+            pygame.draw.rect(self.image, DARK_GRAY, (border_size, border_size,cell_size,cell_size))
         
         self.surface.blit(self.image, (self.grid_x * 20, self.grid_y * 20))
-        

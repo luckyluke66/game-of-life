@@ -24,6 +24,21 @@ def draw():
     WIN.fill(BLACK)
     game_window.draw()
     
+def mouse_on_grid(pos):                         # osetruje aby neslo klikat mimo pripraveny prostor                         
+    if pos[0] > 100 and pos[0] < WIDTH - 100:   
+        if pos[1] > 180 and pos[1] < HEIGHT - 20:
+            return True
+    return False
+
+def click_cell(pos):
+    grid_pos = [pos[0]-100, pos[1]-180]         # seznam ma 2 promenne 1 pozice x mysi a pozice y 
+    grid_pos[0] = grid_pos[0]//20               # tyto promenne muzou nabyvat jen hodnot jen v poli 
+    grid_pos[1] = grid_pos[1]//20               # delime hodnoty velikosti bunky 
+    if game_window.grid[grid_pos[1]][grid_pos[0]].alive:
+        game_window.grid[grid_pos[1]][grid_pos[0]].alive = False
+    else:
+        game_window.grid[grid_pos[1]][grid_pos[0]].alive = True
+    
 
 def main():
     run = True
@@ -32,6 +47,11 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                if mouse_on_grid(mouse_pos):
+                    click_cell(mouse_pos)
+
         update()
         draw()
         pygame.display.update()
