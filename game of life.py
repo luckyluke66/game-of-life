@@ -1,7 +1,7 @@
 import pygame
 import sys
 from game_window import *
-
+from Button import *
 pygame.init()
 
 FONT = pygame.font.Font('font/8-BIT WONDER.ttf', 20)
@@ -11,11 +11,22 @@ FPS = 60
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 game_window = Game_window(WIN, 100,180)
 clock = pygame.time.Clock()
+state = "setting"
 
 def update():
     game_window.update()
 
 def draw():
+    WIN.fill(BLACK)
+    game_window.draw()
+def running_update():
+    game_window.update()
+def running_draw():
+    WIN.fill(BLACK)
+    game_window.draw()
+def paused_update():
+    game_window.update()
+def paused_draw():
     WIN.fill(BLACK)
     game_window.draw()
     
@@ -34,32 +45,21 @@ def click_cell(pos):
     else:
         game_window.grid[grid_pos[1]][grid_pos[0]].alive = True
     
-def buttons():
-    start_text = FONT.render("Start", 1, LIGHT_GRAY)
-    reset_text = FONT.render("Reset",1, LIGHT_GRAY)
-    pause_text = FONT.render("Pause", 1, LIGHT_GRAY)
-    WIN.blit(start_text, (153, 105))
-    WIN.blit(pause_text, (353, 105))
-    WIN.blit(reset_text, (553, 105))
+def run_game():
+    global state 
+    state = "running"
 
-def button_hover(mouse):
-    # start button()
-    if mouse[0] >= 150 and mouse[0] <= 250 and mouse[1] >= 100 and mouse[1]<= 140:
-        pygame.draw.rect(WIN, DARK_GREEN, [150, 100, 100, 40])
-    else:
-        pygame.draw.rect(WIN, GREEN, [150, 100, 100, 40])
-    # pause button
-    if mouse[0] >= 350 and mouse[0] <= 450 and mouse[1] >= 100 and mouse[1]<= 140:
-        pygame.draw.rect(WIN, DARK_BLUE, [350, 100, 100, 40])
-    else:
-        pygame.draw.rect(WIN, BLUE, [350, 100, 100, 40])
-    # stop button
-    if mouse[0] >= 550 and mouse[0] <= 650 and mouse[1] >= 100 and mouse[1]<= 140: 
-        pygame.draw.rect(WIN, DARK_RED, [550, 100, 100, 40])
-    else:
-        pygame.draw.rect(WIN, RED, [550, 100, 100, 40])
+def pause_game():
+    global state 
+    state = "paused"
+def reset_game():
+    global state
+    state = "setting"
+    game_window.reset_grid()
+
 
 def main():
+    button = Button(WIN)
     run = True
     while run:
         clock.tick(FPS)
@@ -73,16 +73,27 @@ def main():
                     click_cell(mouse_pos)
                 if mouse[0] >= 150 and mouse[0] <= 250 and mouse[1] >= 100 and mouse[1]<= 140:
                     print("start")
+                    run_game()
                 if mouse[0] >= 350 and mouse[0] <= 450 and mouse[1] >= 100 and mouse[1]<= 140:
                     print("pause")
+                    pause_game()
                 if mouse[0] >= 550 and mouse[0] <= 650 and mouse[1] >= 100 and mouse[1]<= 140:
-                    print("stop")
+                    print("reset")
+                    reset_game()
+        if state == "setting":
+            update()
+            draw()   
+        if state == "running":
+            running_update()
+            running_draw()
+        if state == "paused":
+            paused_update()
+            paused_draw()
 
-        update()
-        draw()
-        button_hover(mouse)
-        buttons()
+        button.button_hover(mouse)
+        button.draw_buttons()
         pygame.display.update()
+        print(state)
     pygame.quit()
     sys.exit()
 main()
