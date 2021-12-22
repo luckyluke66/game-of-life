@@ -36,9 +36,6 @@ class Cell:
             if cell.alive:
                 self.highlighted_by_neighbour = True
         """
-        for cell in self.neighbours:
-            if cell.alive:
-                self.alive_neighbours += 1
 
     def draw(self):
         if self.alive:
@@ -68,3 +65,10 @@ class Cell:
                 self.neighbours.append(grid[neighbour[1]][neighbour[0]])
             except:
                 print(neighbour)
+
+    def live_neighbours(self):
+        count = 0
+        for neighbour in self.neighbours:
+            if neighbour.alive:
+                count += 1
+        self.alive_neighbours = count
